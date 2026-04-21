@@ -2,913 +2,120 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>序贯抽样决策工具 | 可靠性NG分析 · 批量抽样 + 实时样本量建议</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的工具箱</title>
     <style>
         * {
-            box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-        }
-        body {
-            background: #f1f5f9;
             margin: 0;
-            padding: 24px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
         .container {
-            max-width: 1400px;
-            width: 100%;
+            max-width: 900px;
             margin: 0 auto;
         }
-        .card {
+
+        header {
+            text-align: center;
+            margin: 50px 0 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .tool-card {
             background: white;
-            border-radius: 28px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-            padding: 1.5rem;
-            margin-bottom: 1.8rem;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s;
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #eef2ff;
-            padding-bottom: 0.6rem;
-        }
-        .card-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #1e293b, #2d3a4e);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin: 0;
-            letter-spacing: -0.3px;
-        }
-        .badge {
-            background: #eef2ff;
-            padding: 0.25rem 0.75rem;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #1e40af;
-        }
-        .help-badge {
-            background: #f1f5f9;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #475569;
-            cursor: help;
-            margin-left: 6px;
-            border: 1px solid #cbd5e1;
-        }
-        .param-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-        }
-        .param-field {
-            flex: 1;
-            min-width: 160px;
-        }
-        .param-field label {
-            display: flex;
-            align-items: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 0.3rem;
-        }
-        .param-field input {
-            width: 100%;
-            padding: 0.6rem 0.75rem;
-            border-radius: 16px;
-            border: 1px solid #cbd5e1;
-            background: #fefefe;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-        .param-field input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-        }
-        .field-hint {
-            font-size: 0.7rem;
-            color: #475569;
-            margin-top: 0.25rem;
-            line-height: 1.3;
-        }
-        .suggest-box {
-            background: #f1f5f9;
-            border-radius: 16px;
-            padding: 0.5rem 0.8rem;
-            margin-top: 0.5rem;
-            font-size: 0.7rem;
-            color: #1e293b;
-        }
-        button {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-weight: 500;
-            cursor: pointer;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
-            font-size: 0.85rem;
+            text-decoration: none;
+            color: inherit;
         }
-        button.primary {
-            background: #1e293b;
-            border-color: #1e293b;
-            color: white;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-        button.primary:hover {
-            background: #0f172a;
-            transform: translateY(-1px);
+
+        .tool-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #222;
         }
-        button.success-btn {
-            background: #10b981;
-            border-color: #10b981;
-            color: white;
+
+        .tool-card p {
+            color: #666;
+            font-size: 0.95rem;
         }
-        button.danger-btn {
-            background: #ef4444;
-            border-color: #ef4444;
-            color: white;
-        }
-        button.secondary {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-        }
-        button.secondary:hover {
-            background: #e2e8f0;
-        }
-        .stats-panel {
-            background: #f8fafc;
-            border-radius: 24px;
-            padding: 1rem 1.2rem;
-            margin: 1rem 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .stat-item {
-            background: white;
-            border-radius: 28px;
-            padding: 0.5rem 1.2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+        footer {
             text-align: center;
-            flex: 1;
-            min-width: 90px;
-        }
-        .stat-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #475569;
-            letter-spacing: 0.3px;
-        }
-        .stat-value {
-            font-size: 1.7rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: #0f172a;
-        }
-        .decision-box {
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 1rem 1.5rem;
-            text-align: center;
-            border-left: 8px solid;
-            transition: 0.2s;
-            margin: 1rem 0;
-        }
-        .decision-continue {
-            border-left-color: #f59e0b;
-            background: #fffbeb;
-        }
-        .decision-accept {
-            border-left-color: #10b981;
-            background: #ecfdf5;
-        }
-        .decision-reject {
-            border-left-color: #ef4444;
-            background: #fef2f2;
-        }
-        .decision-text {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin: 0;
-        }
-        .lr-detail {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            background: #f1f5f9;
-            padding: 0.6rem;
-            border-radius: 20px;
-            text-align: center;
-        }
-        .advice-panel {
-            background: #eef2ff;
-            border-radius: 24px;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid #c7d2fe;
-        }
-        .advice-title {
-            font-weight: 700;
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .advice-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
-        }
-        .advice-item {
-            background: white;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            flex: 1;
-            min-width: 150px;
-            text-align: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .advice-label {
-            font-size: 0.7rem;
-            color: #1e40af;
-            font-weight: 600;
-        }
-        .advice-number {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #0f172a;
-        }
-        .advice-unit {
-            font-size: 0.7rem;
-        }
-        .record-list {
-            max-height: 320px;
-            overflow-y: auto;
-            background: #fefefe;
-            border-radius: 24px;
-            border: 1px solid #e2e8f0;
-            padding: 0.5rem;
-        }
-        .record-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.6rem 1rem;
-            border-bottom: 1px solid #eef2ff;
+            margin-top: 60px;
+            color: #999;
             font-size: 0.9rem;
-            align-items: center;
-        }
-        .record-index {
-            font-weight: 600;
-            color: #475569;
-            min-width: 55px;
-        }
-        .record-detail {
-            flex: 1;
-            text-align: center;
-            font-family: monospace;
-        }
-        .batch-ng-badge {
-            background: #fee2e2;
-            color: #b91c1c;
-            padding: 0.2rem 0.6rem;
-            border-radius: 30px;
-            font-weight: 600;
-        }
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            margin: 1rem 0 0.5rem 0;
-            align-items: center;
-        }
-        .batch-input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 24px;
-            margin: 0.5rem 0;
-            align-items: flex-end;
-        }
-        .batch-field {
-            flex: 1;
-            min-width: 120px;
-        }
-        .batch-field label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #334155;
-        }
-        .batch-field input {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 14px;
-            border: 1px solid #cbd5e1;
-        }
-        .info-note {
-            background: #fef9e3;
-            border-radius: 24px;
-            padding: 0.8rem 1.2rem;
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: #854d0e;
-            border-left: 4px solid #facc15;
-        }
-        .footer-note {
-            font-size: 0.7rem;
-            text-align: center;
-            color: #64748b;
-            margin-top: 1rem;
-        }
-        .collapsible {
-            background-color: #f1f5f9;
-            border-radius: 24px;
-            padding: 0.5rem 1rem;
-            margin-top: 1rem;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-            background: #fefce8;
-            border-radius: 20px;
-            padding: 0 1rem;
-            margin-top: 0.5rem;
-        }
-        .collapsible.open + .collapsible-content {
-            max-height: 800px;
-            padding: 0.8rem 1rem;
-        }
-        @media (max-width: 680px) {
-            .card { padding: 1rem; }
-            .stat-value { font-size: 1.3rem; }
-            .decision-text { font-size: 1.1rem; }
-            .advice-number { font-size: 1.2rem; }
-        }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .percent-unit {
-            font-size: 0.7rem;
-            color: #475569;
-            margin-left: 2px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- 快速引导卡片 -->
-    <div class="card" style="background: #fefce8; border-color: #fde047;">
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <span style="font-size: 2rem;">📘</span>
-            <div>
-                <strong style="font-size: 1.1rem;">可靠性 NG 批量序贯抽样 (百分比版 + 实时样本量建议)</strong><br>
-                <span style="font-size: 0.85rem;">设定基准不良率(%)与恶化不良率(%) → 逐批输入【试验总数】和【NG数量】 → 动态显示还需多少试验可做出决策</span>
-            </div>
+    <div class="container">
+        <header>
+            <h1>🧰 工具箱</h1>
+            <p>收集常用的在线小工具，简洁实用</p>
+        </header>
+
+        <div class="tool-grid">
+            <a href="序贯抽样-完整版-基于二项分布进行序贯概率比检验.html" class="tool-card">
+                <h3>序贯抽样计算</h3>
+                <p>基于二项分布进行序贯概率比检验，获取加测数量建议</p>
+            </a>
+
+            <a href="tool2/" class="tool-card">
+                <h3>二维码工具</h3>
+                <p>快速生成、解析二维码</p>
+            </a>
+
+            <a href="tool3.html" class="tool-card">
+                <h3>时间戳转换</h3>
+                <p>时间戳 ↔ 日期时间互转</p>
+            </a>
+
+            <!-- 你可以继续复制上面的卡片，添加更多工具 -->
+            <!--
+            <a href="tool4.html" class="tool-card">
+                <h3>工具名称</h3>
+                <p>工具描述</p>
+            </a>
+            -->
         </div>
+
+        <footer>
+            &copy; 工具箱 | 纯静态在线工具
+        </footer>
     </div>
-
-    <!-- 参数设定卡片 -->
-    <div class="card">
-        <div class="card-header">
-            <h2>📊 序贯概率比检验 (SPRT) · 不良率分析</h2>
-            <div class="badge">百分比输入 · 批量抽样</div>
-        </div>
-        <div class="param-group">
-            <div class="param-field">
-                <label>原假设 H₀ : p = p₀ (基准不良率%) <span class="help-badge" title="当前产品/工艺可接受的不良率上限">?</span></label>
-                <input type="number" id="p0" step="0.5" min="0.1" max="99.9" value="5.0">
-                <div class="field-hint">📌 期望的NG率上限 (例如 5%)</div>
-            </div>
-            <div class="param-field">
-                <label>备择假设 H₁ : p = p₁ (恶化不良率%) <span class="help-badge" title="需要检测到的显著变差的不良率，通常比p₀大">?</span></label>
-                <input type="number" id="p1" step="0.5" min="0.1" max="99.9" value="10.0">
-                <div class="field-hint">⚠️ 值得警惕的NG率 (如10%)</div>
-            </div>
-            <div class="param-field">
-                <label>α (第I类错误) % <span class="help-badge" title="生产方风险：误将合格批次判为不合格的概率">?</span></label>
-                <input type="number" id="alpha" step="0.5" min="0.1" max="30" value="5.0">
-                <div class="field-hint">虚警概率 (通常 5% 或 1%)</div>
-                <div class="suggest-box">
-                    💡 <strong>建议值</strong>：一般5%；关键安全产品取1%；成本不敏感取10%。
-                </div>
-            </div>
-            <div class="param-field">
-                <label>β (第II类错误) % <span class="help-badge" title="使用方风险：漏掉真实恶化的概率">?</span></label>
-                <input type="number" id="beta" step="0.5" min="0.1" max="30" value="10.0">
-                <div class="field-hint">漏报概率 (通常 10% 或 20%)</div>
-                <div class="suggest-box">
-                    💡 <strong>建议值</strong>：常规10%；高可靠性要求取5%；快速筛选取20%。
-                </div>
-            </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
-            <button id="applyParamsBtn" class="primary">📌 应用参数 & 重置批次</button>
-            <button id="resetSamplingBtn" class="secondary">🔄 仅重置所有批次</button>
-        </div>
-        <div class="lr-detail" style="margin-top: 12px;">
-            <span>📐 决策边界 (对数尺度) : </span>
-            <strong id="logABound">log(A)= — , log(B)= —</strong>
-            <span class="help-badge" style="margin-left: 6px;" title="累积似然比越过上界→拒绝H₀(不良率显著恶化)；低于下界→接受H₀(不良率仍可接受)；之间则继续抽样">ⓘ</span>
-        </div>
-    </div>
-
-    <!-- 实时状态 & 决策区域 -->
-    <div class="card">
-        <div class="card-header">
-            <h2>🎯 实时抽样决策 (基于累计批次)</h2>
-            <div class="badge">累积统计</div>
-        </div>
-        <div class="stats-panel">
-            <div class="stat-item"><div class="stat-label">累计试验总数 N</div><div class="stat-value" id="totalN">0</div></div>
-            <div class="stat-item"><div class="stat-label">累计NG数 K</div><div class="stat-value" id="totalNG">0</div></div>
-            <div class="stat-item"><div class="stat-label">累计合格数</div><div class="stat-value" id="totalPass">0</div></div>
-            <div class="stat-item"><div class="stat-label">累计NG率</div><div class="stat-value" id="ngRate">— %</div></div>
-        </div>
-        <div id="decisionBox" class="decision-box decision-continue">
-            <div class="decision-text" id="decisionText">⚖️ 继续抽样</div>
-            <div id="decisionSub" style="font-size:0.85rem; margin-top:6px;">当前证据不足，请继续添加批次</div>
-        </div>
-        <div class="lr-detail">
-            📈 对数似然比 log(Λ) = <strong id="logLRValue">0.0000</strong> &nbsp;|&nbsp;
-            阈值区间: [ <span id="logBval">—</span> , <span id="logAval">—</span> ]
-            <span class="help-badge" title="正值表示数据倾向于支持H₁(不良率变高)，负值倾向于H₀">ⓘ</span>
-        </div>
-
-        <!-- 实时抽样数量建议区域 -->
-        <div class="advice-panel" id="advicePanel">
-            <div class="advice-title">
-                <span>📊 实时抽样数量建议</span>
-                <span class="help-badge" title="基于当前累计数据及参数，估算还需多少试验（样本数）才能做出决策。全合格/全NG为极端情景，当前趋势基于观测NG率。">ⓘ</span>
-            </div>
-            <div class="advice-grid" id="adviceGrid">
-                <div class="advice-item"><div class="advice-label">✅ 若后续全合格 (NG=0)</div><div class="advice-number" id="adviceAccept">—</div><div class="advice-unit">个试验后接受H₀</div></div>
-                <div class="advice-item"><div class="advice-label">❌ 若后续全NG</div><div class="advice-number" id="adviceReject">—</div><div class="advice-unit">个试验后拒绝H₀</div></div>
-                <div class="advice-item"><div class="advice-label">📈 保持当前NG率</div><div class="advice-number" id="adviceCurrent">—</div><div class="advice-unit">个试验到最近边界</div></div>
-            </div>
-            <div id="adviceNote" style="font-size:0.7rem; margin-top:8px; color:#475569; text-align:center;"></div>
-        </div>
-
-        <!-- 批量抽样输入区 -->
-        <div class="batch-input-group">
-            <div class="batch-field">
-                <label>本次试验总数 (nᵢ)</label>
-                <input type="number" id="batchTotal" value="30" step="1" min="1">
-            </div>
-            <div class="batch-field">
-                <label>本次NG数量 (xᵢ)</label>
-                <input type="number" id="batchNG" value="1" step="1" min="0">
-            </div>
-            <button id="addBatchBtn" class="success-btn" style="background:#3b82f6; border-color:#3b82f6;">➕ 添加本批次</button>
-        </div>
-        <div class="action-buttons">
-            <button id="undoBtn" class="secondary">↩ 撤销上一批次</button>
-            <button id="randomBatchBtn" class="secondary">🎲 随机生成批次 (基于基准不良率)</button>
-        </div>
-        <div class="info-note">
-            💡 <strong>批量操作说明</strong>：每批输入试验总数和该批中发现的不良品(NG)数量，点击添加后自动累积计算。决策一旦做出（接受/拒绝），将禁止继续添加批次，可点击「重置」或「撤销」后继续。
-        </div>
-    </div>
-
-    <!-- 批次记录 -->
-    <div class="card">
-        <div class="card-header">
-            <h2>📋 各批次抽样记录</h2>
-            <div class="badge" id="batchCountBadge">0 个批次</div>
-        </div>
-        <div id="recordList" class="record-list">
-            <div style="text-align: center; padding: 20px; color: #94a3b8;">暂无批次数据，请添加上方批次</div>
-        </div>
-    </div>
-
-    <!-- 详细帮助折叠区 -->
-    <div class="card" style="padding: 0.8rem 1rem;">
-        <div id="helpToggle" class="collapsible">
-            <span>📖 点击展开 α / β 详细说明 & 使用场景建议</span>
-            <span>▼</span>
-        </div>
-        <div id="helpContent" class="collapsible-content">
-            <div style="font-size: 0.85rem; line-height: 1.5;">
-                <p><strong>🔧 第I类错误 (α) —— 生产方风险</strong><br>
-                含义：实际不良率 ≤ p₀ (合格)，但检验结果却判定为不合格（拒绝H₀）。这会导致合格批次被误判，增加生产成本。<br>
-                <strong>场景建议：</strong><br>
-                - 一般工业品：α = 5%<br>
-                - 高价值/安全关键产品 (航空航天、医疗)：α = 1% 或更低<br>
-                - 成本敏感、快速筛选：α = 10%</p>
-                
-                <p><strong>⚠️ 第II类错误 (β) —— 使用方风险</strong><br>
-                含义：实际不良率 ≥ p₁ (恶化)，但检验结果却判定为合格（接受H₀）。这会导致不合格批次流入市场，影响可靠性。<br>
-                <strong>场景建议：</strong><br>
-                - 常规消费电子：β = 10% ~ 20%<br>
-                - 汽车、工业控制：β = 10%<br>
-                - 高可靠军用/航空：β = 5% 或更低<br>
-                - 快速淘汰不良批次：β = 20% (接受一定漏检风险)</p>
-                
-                <p><strong>📊 实时样本量建议解读</strong><br>
-                • <strong>全合格情景</strong>：假设未来所有试验均无NG，估算出接受H₀（判定合格）所需最少额外试验数。<br>
-                • <strong>全NG情景</strong>：假设未来所有试验均为NG，估算出拒绝H₀（判定不合格）所需最少额外试验数。<br>
-                • <strong>当前趋势</strong>：基于当前累计NG率，预测保持该比率时到达较近决策边界所需的试验数，更贴近实际预期。<br>
-                注意：这些为理论估算值，实际决策可能因随机波动略有差异，但具有重要参考价值。</p>
-            </div>
-        </div>
-    </div>
-    <div class="footer-note">
-        ⚡ 基于序贯概率比检验(SPRT) | 实时建议帮助规划剩余试验量 | 批量输入，动态决策。
-    </div>
-</div>
-
-<script>
-    // ---------- 数据结构 ----------
-    let batches = [];          // 存储每个批次 { total: number, ng: number }
-    let samplingActive = true; // 是否允许添加新批次
-    
-    // 参数 (小数形式)
-    let p0 = 0.05;
-    let p1 = 0.10;
-    let alpha = 0.05;
-    let beta = 0.10;
-    
-    let logA = 0, logB = 0;
-    
-    // DOM 元素
-    const p0Input = document.getElementById('p0');
-    const p1Input = document.getElementById('p1');
-    const alphaInput = document.getElementById('alpha');
-    const betaInput = document.getElementById('beta');
-    const applyBtn = document.getElementById('applyParamsBtn');
-    const resetSamplingBtn = document.getElementById('resetSamplingBtn');
-    const addBatchBtn = document.getElementById('addBatchBtn');
-    const undoBtn = document.getElementById('undoBtn');
-    const randomBatchBtn = document.getElementById('randomBatchBtn');
-    const batchTotalInput = document.getElementById('batchTotal');
-    const batchNGInput = document.getElementById('batchNG');
-    
-    const totalNSpan = document.getElementById('totalN');
-    const totalNGSpan = document.getElementById('totalNG');
-    const totalPassSpan = document.getElementById('totalPass');
-    const ngRateSpan = document.getElementById('ngRate');
-    const decisionTextSpan = document.getElementById('decisionText');
-    const decisionSub = document.getElementById('decisionSub');
-    const decisionBox = document.getElementById('decisionBox');
-    const logLRValueSpan = document.getElementById('logLRValue');
-    const logAvalSpan = document.getElementById('logAval');
-    const logBvalSpan = document.getElementById('logBval');
-    const logABoundStrong = document.getElementById('logABound');
-    const recordListDiv = document.getElementById('recordList');
-    const batchCountBadge = document.getElementById('batchCountBadge');
-    
-    // 建议区域元素
-    const adviceAcceptSpan = document.getElementById('adviceAccept');
-    const adviceRejectSpan = document.getElementById('adviceReject');
-    const adviceCurrentSpan = document.getElementById('adviceCurrent');
-    const adviceNote = document.getElementById('adviceNote');
-    
-    // 帮助折叠
-    const helpToggle = document.getElementById('helpToggle');
-    const helpContent = document.getElementById('helpContent');
-    helpToggle.addEventListener('click', () => {
-        helpToggle.classList.toggle('open');
-        if (helpToggle.classList.contains('open')) {
-            helpContent.style.maxHeight = helpContent.scrollHeight + 'px';
-            helpToggle.querySelector('span:last-child').innerHTML = '▲';
-        } else {
-            helpContent.style.maxHeight = '0';
-            helpToggle.querySelector('span:last-child').innerHTML = '▼';
-        }
-    });
-    
-    // 辅助函数：百分比转小数
-    function percentToDecimal(val) {
-        return val / 100;
-    }
-    
-    // 验证参数 (输入为百分比数值)
-    function validateParams() {
-        let p0v = parseFloat(p0Input.value);
-        let p1v = parseFloat(p1Input.value);
-        let av = parseFloat(alphaInput.value);
-        let bv = parseFloat(betaInput.value);
-        if (isNaN(p0v) || isNaN(p1v) || isNaN(av) || isNaN(bv)) return false;
-        if (p0v <= 0 || p0v >= 100) return false;
-        if (p1v <= 0 || p1v >= 100) return false;
-        if (p0v === p1v) return false;
-        if (av <= 0 || av >= 100) return false;
-        if (bv <= 0 || bv >= 100) return false;
-        return true;
-    }
-    
-    function updateThresholds() {
-        const A = (1 - beta) / alpha;
-        const B = beta / (1 - alpha);
-        logA = Math.log(A);
-        logB = Math.log(B);
-        logAvalSpan.innerText = logA.toFixed(4);
-        logBvalSpan.innerText = logB.toFixed(4);
-        logABoundStrong.innerText = `log(A)=${logA.toFixed(4)}, log(B)=${logB.toFixed(4)}`;
-    }
-    
-    function getCumulative() {
-        let totalN = 0, totalNG = 0;
-        for (let b of batches) {
-            totalN += b.total;
-            totalNG += b.ng;
-        }
-        return { totalN, totalNG };
-    }
-    
-    function computeLogLR(totalN, totalNG) {
-        if (totalN === 0) return 0;
-        const term1 = Math.log(p1 / p0);
-        const term2 = Math.log((1 - p1) / (1 - p0));
-        const lr = totalNG * term1 + (totalN - totalNG) * term2;
-        if (isNaN(lr)) return 0;
-        return lr;
-    }
-    
-    function getDecision(logLR) {
-        if (logLR >= logA) return 'reject';
-        if (logLR <= logB) return 'accept';
-        return 'continue';
-    }
-    
-    // 修正后的抽样数量建议函数
-    function updateSamplingAdvice(totalN, totalNG, logLR, decision) {
-        if (decision !== 'continue' || totalN === 0) {
-            if (decision !== 'continue') {
-                adviceAcceptSpan.innerText = '—';
-                adviceRejectSpan.innerText = '—';
-                adviceCurrentSpan.innerText = '—';
-                adviceNote.innerText = '已做出最终决策，无需继续抽样。';
-            } else {
-                adviceAcceptSpan.innerText = '—';
-                adviceRejectSpan.innerText = '—';
-                adviceCurrentSpan.innerText = '—';
-                adviceNote.innerText = '暂无数据，请添加批次。';
-            }
-            return;
-        }
-        
-        // 每个样本的增量（对数似然比变化）
-        const incPerSuccess = Math.log((1 - p1) / (1 - p0)); // 合格样本，通常为负值
-        const incPerFail    = Math.log(p1 / p0);            // NG样本，通常为正值
-        
-        // 1. 若后续全合格 (所有新样本都是合格)
-        // 需要 logLR + m * incPerSuccess <= logB
-        // 由于 incPerSuccess < 0，解得 m >= (logB - logLR) / incPerSuccess
-        let needAccept = Infinity;
-        if (incPerSuccess < 0) {
-            const diff = logB - logLR;   // 目标差值 (通常为负)
-            // 因为分母为负，除法结果为正
-            needAccept = Math.ceil(diff / incPerSuccess);
-            if (needAccept < 0 || !isFinite(needAccept)) needAccept = Infinity;
-        }
-        
-        // 2. 若后续全NG (所有新样本都是NG)
-        // 需要 logLR + m * incPerFail >= logA
-        // incPerFail > 0，解得 m >= (logA - logLR) / incPerFail
-        let needReject = Infinity;
-        if (incPerFail > 0) {
-            const diff = logA - logLR;
-            needReject = Math.ceil(diff / incPerFail);
-            if (needReject < 0 || !isFinite(needReject)) needReject = Infinity;
-        }
-        
-        // 显示，大于5000则显示 >5000
-        adviceAcceptSpan.innerText = (needAccept === Infinity || needAccept > 5000) ? '>5000' : needAccept;
-        adviceRejectSpan.innerText = (needReject === Infinity || needReject > 5000) ? '>5000' : needReject;
-        
-        // 3. 基于当前NG率，估算到最近边界的期望试验数
-        const curRate = totalNG / totalN;
-        const avgInc = curRate * incPerFail + (1 - curRate) * incPerSuccess;
-        let needCurrent = Infinity;
-        if (Math.abs(avgInc) > 1e-8) {
-            let distToUpper = logA - logLR;
-            let distToLower = logLR - logB;
-            let needUp = distToUpper > 0 ? Math.ceil(distToUpper / avgInc) : Infinity;
-            let needDown = distToLower > 0 ? Math.ceil(distToLower / (-avgInc)) : Infinity;
-            if (avgInc > 0) {
-                needCurrent = needUp;
-            } else if (avgInc < 0) {
-                needCurrent = needDown;
-            }
-            if (needCurrent < 0 || !isFinite(needCurrent)) needCurrent = Infinity;
-        }
-        
-        if (needCurrent === Infinity || needCurrent > 5000) {
-            adviceCurrentSpan.innerText = '>5000';
-            adviceNote.innerText = '当前趋势下所需样本量极大，可能需要调整参数或接受当前结论。';
-        } else {
-            adviceCurrentSpan.innerText = needCurrent;
-            adviceNote.innerText = `基于当前NG率 ${(curRate*100).toFixed(2)}% 估算，若保持此比率，约需 ${needCurrent} 个试验到达最近边界。`;
-        }
-        
-        // 附加提示
-        if (needAccept < 100 || needReject < 100) {
-            adviceNote.innerText += ' 极端情景下少量样本即可决策，建议继续抽样。';
-        }
-    }
-    
-    function refreshUI() {
-        const { totalN, totalNG } = getCumulative();
-        const totalPass = totalN - totalNG;
-        const ngRatePercent = totalN === 0 ? null : (totalNG / totalN * 100);
-        const logLR = computeLogLR(totalN, totalNG);
-        const decision = getDecision(logLR);
-        
-        totalNSpan.innerText = totalN;
-        totalNGSpan.innerText = totalNG;
-        totalPassSpan.innerText = totalPass;
-        ngRateSpan.innerText = (ngRatePercent !== null) ? ngRatePercent.toFixed(2) + ' %' : '—';
-        logLRValueSpan.innerText = logLR.toFixed(6);
-        
-        let decisionMsg = '', subMsg = '', boxClass = 'decision-continue';
-        if (decision === 'continue') {
-            decisionMsg = '🔍 继续抽样';
-            subMsg = '当前证据不足，请继续添加批次。';
-            boxClass = 'decision-continue';
-            samplingActive = true;
-        } else if (decision === 'accept') {
-            decisionMsg = '✅ 接受原假设 H₀';
-            subMsg = `接受 H₀: 不良率 ≤ ${(p0*100).toFixed(1)}% (当前累计NG率 ${ngRatePercent ? ngRatePercent.toFixed(2) : '?'}%)，可靠性可接受。`;
-            boxClass = 'decision-accept';
-            samplingActive = false;
-        } else {
-            decisionMsg = '🚫 拒绝原假设，接受 H₁';
-            subMsg = `拒绝 H₀: 不良率已显著升高 ≥ ${(p1*100).toFixed(1)}% (当前累计NG率 ${ngRatePercent ? ngRatePercent.toFixed(2) : '?'}%)，可靠性不合格！`;
-            boxClass = 'decision-reject';
-            samplingActive = false;
-        }
-        decisionTextSpan.innerText = decisionMsg;
-        decisionSub.innerText = subMsg;
-        decisionBox.className = `decision-box ${boxClass}`;
-        
-        addBatchBtn.disabled = !samplingActive;
-        randomBatchBtn.disabled = !samplingActive;
-        
-        // 更新抽样建议
-        if (samplingActive && totalN > 0) {
-            updateSamplingAdvice(totalN, totalNG, logLR, decision);
-        } else if (!samplingActive) {
-            adviceAcceptSpan.innerText = '—';
-            adviceRejectSpan.innerText = '—';
-            adviceCurrentSpan.innerText = '—';
-            adviceNote.innerText = '决策已终止，无需继续抽样。';
-        } else {
-            adviceAcceptSpan.innerText = '—';
-            adviceRejectSpan.innerText = '—';
-            adviceCurrentSpan.innerText = '—';
-            adviceNote.innerText = '请添加批次后查看建议。';
-        }
-        
-        renderBatchList();
-        batchCountBadge.innerText = `${batches.length} 个批次`;
-        
-        if (!samplingActive) {
-            decisionSub.innerText += ' (抽样终止，请按「重置所有批次」或「撤销上一批次」继续)';
-        }
-    }
-    
-    function renderBatchList() {
-        if (batches.length === 0) {
-            recordListDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8;">📭 暂无批次数据，请添加上方批次</div>';
-            return;
-        }
-        let html = '';
-        batches.forEach((batch, idx) => {
-            const batchNgRate = (batch.ng / batch.total * 100).toFixed(2);
-            html += `
-                <div class="record-item">
-                    <span class="record-index">批次 ${idx+1}</span>
-                    <span class="record-detail">试验: ${batch.total} &nbsp;| NG: ${batch.ng} &nbsp;| 本批NG率: ${batchNgRate}%</span>
-                    <span class="batch-ng-badge">${batch.ng}/${batch.total}</span>
-                </div>
-            `;
-        });
-        recordListDiv.innerHTML = html;
-    }
-    
-    function addBatch(total, ng) {
-        if (!samplingActive) {
-            alert('已经得出最终决策，无法继续添加批次。请按「重置所有批次」或「撤销上一批次」重新开始。');
-            return false;
-        }
-        if (!Number.isInteger(total) || total <= 0) {
-            alert('试验总数必须为正整数');
-            return false;
-        }
-        if (!Number.isInteger(ng) || ng < 0) {
-            alert('NG数量必须为非负整数');
-            return false;
-        }
-        if (ng > total) {
-            alert('NG数量不能超过试验总数');
-            return false;
-        }
-        batches.push({ total: total, ng: ng });
-        refreshUI();
-        return true;
-    }
-    
-    function undoLastBatch() {
-        if (batches.length === 0) return;
-        batches.pop();
-        refreshUI();
-    }
-    
-    function resetSampling() {
-        batches = [];
-        samplingActive = true;
-        refreshUI();
-    }
-    
-    function applyParametersAndReset() {
-        if (!validateParams()) {
-            alert('参数错误！请检查:\n- p₀, p₁ 必须在 0~100 之间且不相等\n- α, β 必须在 0~100 之间');
-            return false;
-        }
-        p0 = percentToDecimal(parseFloat(p0Input.value));
-        p1 = percentToDecimal(parseFloat(p1Input.value));
-        alpha = percentToDecimal(parseFloat(alphaInput.value));
-        beta = percentToDecimal(parseFloat(betaInput.value));
-        
-        updateThresholds();
-        batches = [];
-        samplingActive = true;
-        refreshUI();
-        return true;
-    }
-    
-    function addRandomBatch() {
-        if (!samplingActive) {
-            alert('决策已终止，无法添加随机批次，请重置后再试。');
-            return;
-        }
-        const randomTotal = Math.floor(Math.random() * 71) + 10; // 10~80
-        let randomNG = 0;
-        for (let i = 0; i < randomTotal; i++) {
-            if (Math.random() < p0) randomNG++;
-        }
-        addBatch(randomTotal, randomNG);
-    }
-    
-    function init() {
-        p0Input.value = '5.0';
-        p1Input.value = '10.0';
-        alphaInput.value = '5.0';
-        betaInput.value = '10.0';
-        p0 = 0.05; p1 = 0.10; alpha = 0.05; beta = 0.10;
-        updateThresholds();
-        resetSampling();
-        
-        applyBtn.addEventListener('click', () => { applyParametersAndReset(); });
-        resetSamplingBtn.addEventListener('click', () => { resetSampling(); });
-        addBatchBtn.addEventListener('click', () => {
-            const total = parseInt(batchTotalInput.value, 10);
-            const ng = parseInt(batchNGInput.value, 10);
-            if (isNaN(total) || isNaN(ng)) {
-                alert('请输入有效的数字');
-                return;
-            }
-            addBatch(total, ng);
-        });
-        undoBtn.addEventListener('click', () => { undoLastBatch(); });
-        randomBatchBtn.addEventListener('click', () => { addRandomBatch(); });
-    }
-    
-    init();
-</script>
 </body>
 </html>
