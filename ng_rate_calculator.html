@@ -108,7 +108,47 @@
             padding: 15px; margin-top: 20px; border-radius: 4px; font-size: 13px; line-height: 1.8;
         }
         .match-explanation strong { color: #0d47a1; }
-        @media (max-width: 768px) { .input-grid { grid-template-columns: 1fr; } .content { padding: 20px; } }
+        /* ===== 移动端响应式适配 ===== */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .container { border-radius: 0; max-width: 100%; }
+            .header { padding: 20px 15px; }
+            .header h1 { font-size: 22px; }
+            .header p { font-size: 12px; }
+            .content { padding: 15px; }
+            .input-section { padding: 15px; }
+            .input-grid { grid-template-columns: 1fr; gap: 12px; }
+            .input-group label { font-size: 13px; }
+            .input-group input, .input-group select { padding: 10px; font-size: 16px; }
+            .btn-calculate { padding: 12px 20px; font-size: 15px; }
+            .confidence-info { font-size: 12px; padding: 12px; }
+            .result-card { padding: 15px; }
+            .result-title { font-size: 16px; }
+            .result-value { font-size: 20px; }
+            .result-detail { font-size: 13px; }
+            .formula-box { font-size: 11px; padding: 10px; overflow-x: auto; }
+            /* 汇总表响应式 */
+            #cardSummary { padding: 15px 12px; margin-bottom: 15px; }
+            #cardSummary .result-title { font-size: 17px; }
+            .summary-table { font-size: 12px; display: block; overflow-x: auto; white-space: nowrap; }
+            .summary-table th, .summary-table td { padding: 8px 6px; }
+            /* 匹配率标签缩小 */
+            .match-rate { font-size: 10px; padding: 2px 8px; margin-left: 5px; }
+            .match-explanation { font-size: 12px; padding: 12px; }
+            h2 { font-size: 18px; }
+        }
+
+        /* 特小屏 (iPhone SE等) */
+        @media (max-width: 375px) {
+            .header h1 { font-size: 18px; }
+            .header p { font-size: 11px; }
+            .result-value { font-size: 17px; }
+            .result-title { font-size: 14px; }
+            .summary-table { font-size: 11px; }
+            .summary-table th, .summary-table td { padding: 6px 4px; }
+            .btn-calculate { font-size: 14px; padding: 10px; }
+            .input-group input, .input-group select { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
